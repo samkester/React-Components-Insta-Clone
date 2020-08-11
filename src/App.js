@@ -20,7 +20,8 @@ const App = () => {
   // Create a state called `posts` to hold the array of post objects, **initializing to dummyData**.
   // This state is the source of truth for the data inside the app. You won't be needing dummyData anymore.
   // To make the search bar work (which is stretch) we'd need another state to hold the search term.
-  const [posts, setPosts] = useState(dummyData)
+  const [posts, setPosts] = useState(dummyData);
+  const [lastCommentID, setLastCommentID] = useState(100);
 
   const likePost = postId => {
     /*
@@ -39,6 +40,17 @@ const App = () => {
        if(post.id === postId) { return {...post, likes: post.likes + 1}; }
        return post;
      }));
+  };
+
+  const addComment = (postId, username, text) => {
+    setPosts(posts.map(post => {
+      if(post.id === postId)
+      {
+        setLastCommentID(lastCommentID + 1);
+        return {...post, comments: [...post.comments, {id:lastCommentID, username:username, text:text}]};
+      }
+      return post;
+    }));
   };
 
   const searchFor = term => {
@@ -60,7 +72,7 @@ const App = () => {
       {/* Add SearchBar and Posts here to render them */}
       {/* Check the implementation of each component, to see what props they require, if any! */}
       <SearchBar searchFor = {searchFor} />
-      <Posts posts = {posts} likePost = {likePost} />
+      <Posts posts = {posts} likePost = {likePost} addComment = {addComment} />
     </div>
   );
 };
