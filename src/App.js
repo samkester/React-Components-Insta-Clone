@@ -14,6 +14,8 @@ import dummyData from "./dummy-data"
 
 import './App.css';
 
+dummyData.forEach(item => item.visible = true); // setup formatting for the search filter
+
 const App = () => {
   // Create a state called `posts` to hold the array of post objects, **initializing to dummyData**.
   // This state is the source of truth for the data inside the app. You won't be needing dummyData anymore.
@@ -34,9 +36,23 @@ const App = () => {
      */
 
      setPosts(posts.map(post => {
-       if(post.id === postId) { return {...post, "likes": post.likes + 1}; }
+       if(post.id === postId) { return {...post, likes: post.likes + 1}; }
        return post;
      }));
+  };
+
+  const searchFor = term => {
+    setPosts(posts.map(post => {
+      // if the post's username includes the search term, and it's invisible, make it visible
+      if(post.username.includes(term))
+      {
+        if(post.visible === false) return {...post, visible: true}; // prevents us from creating unnecessary new objects
+        return post;
+      }
+      // if the post's username doesn't include the search term, and it's visible, make it invisible
+      if(post.visible === true) return {...post, visible: false};
+      return post;
+    }));
   };
 
   return (

@@ -8,7 +8,7 @@ const Post = props => {
   const { post, likePost } = props;
 
   return (
-    <div className='post-border'>
+    <div className={`post-border ${post.visible ? "" : "hidden"}`}>
       <PostHeader
         username={post.username}
         thumbnailUrl={post.thumbnailUrl}
